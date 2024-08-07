@@ -68,29 +68,14 @@ if st.button('Recommend'):
         if recommendations:
             st.write(f"Recommendations for **{selected_song}**:")
 
-            cols = st.columns(3)  # Create 3 columns for layout
+            # Create an expander to make the recommendations scrollable
+            with st.expander("See Recommendations"):
+                for song in recommendations:
+                    poster_url, download_url = fetch_poster_and_urls(song)
 
-            with cols[0]:
-                st.write("**Track Name**")
-
-            with cols[1]:
-                st.write("**Poster**")
-
-            with cols[2]:
-                st.write("**Play**")
-
-            for song in recommendations:
-                poster_url, download_url = fetch_poster_and_urls(song)
-
-                # Use columns to display data in rows
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    st.write(song)
-
-                with col2:
+                    # Display each song's details
+                    st.write("**Track Name:**", song)
                     st.image(poster_url, width=200)
-
-                with col3:
                     if download_url:
                         st.audio(download_url)  # Use st.audio to play song
                     else:
