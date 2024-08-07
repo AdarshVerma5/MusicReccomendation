@@ -85,6 +85,16 @@ st.markdown("""
         .recommendation-card audio {
             width: 100%;
         }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            padding: 10px;
+            background: #1F1F1F;
+            color: #B3B3B3;
+            font-size: 0.8rem;
+            border-top-left-radius: 8px;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -130,3 +140,6 @@ if st.button('Recommend'):
             st.warning(f"No recommendations found for **{selected_song}**.")
     else:
         st.warning(f"The song **{selected_song}** is not in the playlist. Please select another song.")
+
+# Footer with credit
+st.markdown("<div class='footer'>Developed by Adarsh Verma</div>", unsafe_allow_html=True)
