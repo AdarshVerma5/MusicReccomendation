@@ -50,9 +50,47 @@ def recommender(song):
 # Streamlit Layout
 st.set_page_config(page_title="Stairway to Your Musical Heaven", page_icon="🎵", layout="wide")
 
-# Title and description with some styling
-st.markdown("<h1 style='text-align: center; color: #1DB954;'>Stairway to Your Musical Heaven</h1>", unsafe_allow_html=True)
-st.write("Welcome to the Music Recommendation System! Select a song to get recommendations.")
+# Custom CSS
+st.markdown("""
+    <style>
+        .main {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .title {
+            text-align: center;
+            color: #1DB954;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: #B3B3B3;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .recommendation-card {
+            background: #1F1F1F;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .recommendation-card img {
+            border-radius: 8px;
+        }
+        .recommendation-card h3 {
+            color: #ffffff;
+        }
+        .recommendation-card audio {
+            width: 100%;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+# Title and description with custom styling
+st.markdown("<div class='title'>Stairway to Your Musical Heaven</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Discover your next favorite track with our advanced music recommendation system.</div>", unsafe_allow_html=True)
 
 # Load song list and similarity matrix
 song_list = pickle.load(open('SongRecommendation/musicForLovers.pkl', 'rb'))
@@ -62,7 +100,8 @@ similarity = pickle.load(open('SongRecommendation/similarityFounded.pkl', 'rb'))
 # User selects a song
 selected_song = st.selectbox(
     'Which song would you like to recommend?',
-    songs['track_name'].values
+    songs['track_name'].values,
+    key='select_song'
 )
 
 if st.button('Recommend'):
@@ -72,25 +111,21 @@ if st.button('Recommend'):
             st.write(f"Recommendations for **{selected_song}**:")
 
             # Create an expander to make the recommendations scrollable
-            with st.expander("See Recommendations"):
+            with st.expander("See Recommendations", expanded=True):
                 for song in recommendations:
                     poster_url, download_url = fetch_poster_and_urls(song)
 
                     # Display each song's details in a styled container
-                    col1, col2, col3 = st.columns([2, 2, 1])  # Adjust column widths
-                    with col1:
-                        st.image(poster_url, width=150, caption=song)
-
-                    with col2:
-                        st.write(f"**{song}**")
-                        if download_url:
-                            st.audio(download_url, format='audio/mp3')  # Use st.audio to play song
-                        else:
-                            st.write("No preview available.")
-                    
-                    # Add space between items
-                    st.markdown("<br>", unsafe_allow_html=True)
-                    
+                    with st.container():
+                        st.markdown(f"""
+                            <div class='recommendation-card'>
+                                <img src="{poster_url}" width="150" />
+                                <h3>{song}</h3>
+                                <div>
+                                    {f'<audio controls><source src="{download_url}" type="audio/mp3"></audio>' if download_url else "No preview available."}
+                                </div>
+                            </div>
+                        """, unsafe_allow_html=True)
         else:
             st.warning(f"No recommendations found for **{selected_song}**.")
     else:
