@@ -48,7 +48,50 @@ def recommender(song):
         return []
 
 # Streamlit Layout
-st.title('Stairway to Your Musical Heaven')
+st.set_page_config(page_title="Stairway to Your Musical Heaven", page_icon="🎵", layout="wide")
+
+st.markdown("""
+    <style>
+        .title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #111;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .song-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            width: 250px;
+        }
+        .song-card img {
+            border-radius: 10px;
+            max-width: 100%;
+            height: auto;
+        }
+        .song-card h3 {
+            font-size: 1.2em;
+            color: #333;
+            margin: 10px 0;
+        }
+        .song-card audio {
+            margin-top: 10px;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown("<div class='title'>Stairway to Your Musical Heaven</div>", unsafe_allow_html=True)
 st.write("Welcome to the Music Recommendation System! Select a song to get recommendations.")
 
 # Load song list and similarity matrix
@@ -70,16 +113,19 @@ if st.button('Recommend'):
 
             # Create an expander to make the recommendations scrollable
             with st.expander("See Recommendations"):
-                for song in recommendations:
+                st.markdown("<div class='container'>", unsafe_allow_html=True)
+                for i, song in enumerate(recommendations):
                     poster_url, download_url = fetch_poster_and_urls(song)
 
                     # Display each song's details
-                    st.write("**Track Name:**", song)
-                    st.image(poster_url, width=200)
-                    if download_url:
-                        st.audio(download_url)  # Use st.audio to play song
-                    else:
-                        st.write("No preview available.")
+                    st.markdown(f"""
+                    <div class='song-card'>
+                        <img src="{poster_url}" alt="{song}">
+                        <h3>{song}</h3>
+                        {'<audio controls><source src="' + download_url + '" type="audio/mpeg"></audio>' if download_url else 'No preview available.'}
+                    </div>
+                    """, unsafe_allow_html=True)
+                st.markdown("</div>", unsafe_allow_html=True)
         else:
             st.warning(f"No recommendations found for **{selected_song}**.")
     else:
