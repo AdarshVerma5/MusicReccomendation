@@ -48,7 +48,7 @@ def recommender(song):
         return []
 
 # Streamlit Layout
-st.title('Music Recommendation System')
+st.title('Stairway to Your Musical Heaven')
 st.write("Welcome to the Music Recommendation System! Select a song to get recommendations.")
 
 # Load song list and similarity matrix
