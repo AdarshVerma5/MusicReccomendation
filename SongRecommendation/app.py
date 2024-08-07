@@ -88,12 +88,12 @@ st.markdown("""
         .footer {
             position: fixed;
             bottom: 0;
-            right: 0;
+            left: 0;
             padding: 10px;
             background: #1F1F1F;
             color: #B3B3B3;
             font-size: 0.8rem;
-            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
         }
     </style>
 """, unsafe_allow_html=True)
